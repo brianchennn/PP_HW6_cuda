@@ -1,8 +1,9 @@
 #include <cuda.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "kernel.h"
 
-__kernel void convolution(
+__global__ void convolution(
     int *filterWidth,
     float *outputImage,
     const float *filter,
@@ -35,16 +36,15 @@ __kernel void convolution(
 void hostFE(int filterWidth, float *filter, int imageHeight, int imageWidth,
         float *inputImage, float *outputImage)
 {
-    cl_int status;
     int filterSize = filterWidth * filterWidth;
 
     // Create memory buffers on the device for each vector
     int *dev_filter_width;
     float *dev_filter, *dev_inputImage, *dev_outputImage;
-    cudaMalloc(dev_filter_width, sizeof(int));
-    cudaMalloc(dev_filter, filterSize * sizeof(float));
-    cudaMalloc(dev_inputImage, imageHeight * imageWidth * sizeof(float));
-    cudaMalloc(dev_outputImage, imageHeight * imageWidth * sizeof(float));
+    cudaMalloc(&dev_filter_width, sizeof(int));
+    cudaMalloc(&dev_filter, filterSize * sizeof(float));
+    cudaMalloc(&dev_inputImage, imageHeight * imageWidth * sizeof(float));
+    cudaMalloc(&dev_outputImage, imageHeight * imageWidth * sizeof(float));
     
     // Copy the filter and inputImage to their respective memory buffers
     cudaMemcpy(dev_filter_width, &filterWidth, sizeof(int), cudaMemcpyHostToDevice);
@@ -54,7 +54,11 @@ void hostFE(int filterWidth, float *filter, int imageHeight, int imageWidth,
    
     // Execute the OpenCL kernel on the list
     dim3 threadPerBlock(10,10);
-    dim3 numBlocks(imageWidth / threadPerBlock.x, imageHeight / threaPerBLock.y);
+    dim3 numBlocks(imageWidth / threadPerBlock.x, imageHeight / threadPerBlock.y);
     convolution<<<numBlocks, threadPerBlock>>>(dev_filter_width, dev_outputImage, dev_filter, dev_inputImage);
     cudaMemcpy(outputImage, dev_outputImage, imageHeight * imageWidth * sizeof(float), cudaMemcpyDeviceToHost);
-
+    cudaFree(dev_filter_width);
+    cudaFree(dev_filter);
+    cudaFree(dev_inputImage);
+    cudaFree(dev_outputImage);
+}
