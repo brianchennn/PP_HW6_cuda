@@ -68,7 +68,6 @@ void initCL(cl_device_id *device, cl_context *context, cl_program *program)
     // Discover device
     clGetDeviceIDs(platform, CL_DEVICE_TYPE_ALL, 1, device, NULL);
     CHECK(status, "clGetDeviceIDs");
-
     // Create context
     cl_context_properties props[3] = {CL_CONTEXT_PLATFORM,
                                       (cl_context_properties)(platform), 0};

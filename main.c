@@ -82,7 +82,6 @@ int main(int argc, char **argv)
    // read filter data
    int filterWidth;
    float *filter = readFilter(filterFile, &filterWidth);
-
    // Homegrown function to read a BMP from file
    float *inputImage = readImage(inputFile, &imageWidth, &imageHeight);
    // Size of the input and output images on the host
