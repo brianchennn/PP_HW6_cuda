@@ -81,7 +81,6 @@ void initCL(cl_device_id *device, cl_context *context, cl_program *program)
     CHECK(status, "clCreateProgramWithSource");
     status = clBuildProgram(*program, 1, device, NULL, NULL, NULL);
     CHECK(status, "clBuildProgram");
-
     return;
 }
 
