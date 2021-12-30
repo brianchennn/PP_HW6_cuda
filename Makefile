@@ -25,4 +25,4 @@ kernel_cu.o: kernel_cu.cu kernel_cu.h
 	$(CXX) $< $(CXXFLAGS) -c -o $@
 
 clean:
-	rm -f conv *.o output.bmp ref.bmp
+	rm -f conv_cuda conv *.o output.bmp ref.bmp
