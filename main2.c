@@ -2,13 +2,10 @@
 #include <getopt.h>
 #include <stdlib.h>
 #include "CycleTimer.h"
-#include "kernel.h"
+#include "kernel_cu.h"
 #include "helper_cu.h"
 #include "bmpfuncs.h"
 #include "serialConv.h"
-
-extern void hostFE(int filterWidth, float *filter, int imageHeight, int imageWidth,
-        float *inputImage, float *outputImage);
 
 
 void usage(const char *progname)

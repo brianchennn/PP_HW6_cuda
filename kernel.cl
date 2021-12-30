@@ -16,8 +16,6 @@ __kernel void convolution(
     {
         for (l = -halffilterSize; l <= halffilterSize; l++)
         {
-            if (iy + k >= 0 && iy + k < y_size &&
-                    ix + l >= 0 && ix + l < x_size)
             {
                 sum += inputImage[(iy + k) * x_size + ix + l] *
                     filter[(k + halffilterSize) * *filterWidth +

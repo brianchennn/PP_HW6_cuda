@@ -1,7 +1,6 @@
 #include <cuda.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "kernel.h"
 
 __global__ void convolution(
     int *filterWidth,

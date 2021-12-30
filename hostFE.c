@@ -26,11 +26,11 @@ void hostFE(int filterWidth, float *filter, int imageHeight, int imageWidth,
 
     // Copy the filter and inputImage to their respective memory buffers
     
-    status = clEnqueueWriteBuffer(command_queue, filter_width_mem, CL_TRUE, 0,
+    status = clEnqueueWriteBuffer(command_queue, filter_width_mem, CL_FALSE, 0,
             sizeof(int), &filterWidth, 0, NULL, NULL);
-    status = clEnqueueWriteBuffer(command_queue, filter_mem, CL_TRUE, 0,
+    status = clEnqueueWriteBuffer(command_queue, filter_mem, CL_FALSE, 0,
             filterSize * sizeof(int), filter, 0, NULL, NULL);
-    status = clEnqueueWriteBuffer(command_queue, inputImage_mem, CL_TRUE, 0, 
+    status = clEnqueueWriteBuffer(command_queue, inputImage_mem, CL_FALSE, 0, 
             imageHeight * imageWidth * sizeof(int), inputImage, 0, NULL, NULL);
 
     // Create the OpenCL kernel
@@ -43,7 +43,7 @@ void hostFE(int filterWidth, float *filter, int imageHeight, int imageWidth,
     status = clSetKernelArg(kernel, 3, sizeof(cl_mem), (void *)&inputImage_mem);
     
     // Execute the OpenCL kernel on the list
-    size_t localws[2] = {10,10};
+    size_t localws[2] = {40,20};
     size_t globalws[2] = {imageWidth, imageHeight};
     //size_t global_item_size = imageHeight * imageWidth; // Process the entire lists
     //size_t local_item_size = 64; // Divide work items into groups of 64
@@ -58,10 +58,10 @@ void hostFE(int filterWidth, float *filter, int imageHeight, int imageWidth,
     status = clFinish(command_queue);
     status = clReleaseKernel(kernel);
     status = clReleaseProgram(program);
-    //status = clReleaseMemObject(inputImage_mem);
-    //status = clReleaseMemObject(outputImage_mem);
-    //status = clReleaseMemObject(filter_width_mem);
-    //status = clReleaseMemObject(filter_mem);
+    status = clReleaseMemObject(inputImage_mem);
+    status = clReleaseMemObject(outputImage_mem);
+    status = clReleaseMemObject(filter_width_mem);
+    status = clReleaseMemObject(filter_mem);
     status = clReleaseCommandQueue(command_queue);
     status = clReleaseContext(*context);
     //free(inputImage);
