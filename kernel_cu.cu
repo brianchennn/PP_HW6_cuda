@@ -39,15 +39,11 @@ void hostFE(int filterWidth, float *filter, int imageHeight, int imageWidth,
 
     // Create memory buffers on the device for each vector
     int *dev_filter_width;
-    float *host_inputImage, *host_outputImage;
     float *dev_filter, *dev_inputImage, *dev_outputImage;
     cudaMalloc(&dev_filter_width, sizeof(int));
     cudaMalloc(&dev_filter, filterSize * sizeof(float));
-    cudaHostAlloc(&host_inputImage, imageHeight * imageWidth * sizeof(float), cudaHostAllocMapped);
-    cudaHostAlloc(&host_outputImage, imageHeight * imageWidth * sizeof(float), cudaHostAllocMapped);
-    size_t pitch1,pitch2;
-    cudaMallocPitch((void **)(&dev_inputImage), &pitch1, (size_t)(imageWidth * sizeof(float)), (size_t)(imageHeight));
-    cudaMallocPitch((void **)(&dev_outputImage), &pitch2, (size_t)(imageWidth * sizeof(float)), (size_t)(imageHeight));
+    cudaMalloc(&dev_inputImage, imageHeight * imageWidth * sizeof(float));
+    cudaMalloc(&dev_outputImage, imageHeight * imageWidth * sizeof(float));
     // Copy the filter and inputImage to their respective memory buffers
     cudaMemcpy(dev_filter_width, &filterWidth, sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_filter, filter, filterSize * sizeof(float), cudaMemcpyHostToDevice);
