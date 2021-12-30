@@ -1,7 +1,7 @@
 default: conv
 
 CC = gcc-10
-CXX = g++17
+CXX = g++
 CXXFLAGS = -I./common -Iobjs/ -O3 -std=c++17 -Wall -g -fPIC -lm
 NVCC = nvcc
 FLAGS = -O3 -lOpenCL -m64 -ffloat-store -w -g -D CL_TARGET_OPENCL_VERSION=220
@@ -21,9 +21,8 @@ cuda: $(cu_OBJS)
 kernel_cu.o: kernel_cu.cu kernel_cu.h
 	${NVCC} ${CUDA_COMPILE_FLAGS} -c kernel_cu.cu -o $@
 
-
-%.o: %.c
-	$(CC) -c $(FLAGS) $< -o $@
+%.o: %cpp
+	$(CXX) $< $(CXXFLAGS) -c -o $@
 
 clean:
 	rm -f conv *.o output.bmp ref.bmp

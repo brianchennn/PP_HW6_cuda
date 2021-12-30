@@ -11,8 +11,8 @@ __global__ void convolution(
 {
     const int ix = blockIdx.x * blockDim.x + threadIdx.x;
     const int iy = blockIdx.y * blockDim.y + threadIdx.y;
-    const int x_size = gridDim.x;
-    const int y_size = gridDim.y;
+    const int x_size = gridDim.x * blockDim.x;
+    const int y_size = gridDim.y * blockDim.x;
     int halffilterSize = *filterWidth / 2;
     float sum = 0.0;
     int k, l;
@@ -44,7 +44,6 @@ void hostFE(int filterWidth, float *filter, int imageHeight, int imageWidth,
     cudaMalloc(&dev_filter, filterSize * sizeof(float));
     cudaMalloc(&dev_inputImage, imageHeight * imageWidth * sizeof(float));
     cudaMalloc(&dev_outputImage, imageHeight * imageWidth * sizeof(float));
-    
     // Copy the filter and inputImage to their respective memory buffers
     cudaMemcpy(dev_filter_width, &filterWidth, sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_filter, filter, filterSize * sizeof(float), cudaMemcpyHostToDevice);
@@ -52,7 +51,7 @@ void hostFE(int filterWidth, float *filter, int imageHeight, int imageWidth,
 
    
     // Execute the OpenCL kernel on the list
-    dim3 threadPerBlock(10,10);
+    dim3 threadPerBlock(20,20);
     dim3 numBlocks(imageWidth / threadPerBlock.x, imageHeight / threadPerBlock.y);
     convolution<<<numBlocks, threadPerBlock>>>(dev_filter_width, dev_outputImage, dev_filter, dev_inputImage);
     cudaMemcpy(outputImage, dev_outputImage, imageHeight * imageWidth * sizeof(float), cudaMemcpyDeviceToHost);
