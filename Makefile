@@ -2,7 +2,7 @@ default: conv
 
 CC = gcc-10
 CXX = g++
-CXXFLAGS = -I./common -Iobjs/ -O3 -std=c++17 -Wall -g -fPIC -lm
+CXXFLAGS = -I./common -Iobjs/ -O3 -std=c++17 -Wno -g -fPIC -lm
 NVCC = nvcc
 FLAGS = -O3 -lOpenCL -m64 -ffloat-store -w -g -D CL_TARGET_OPENCL_VERSION=220
 
