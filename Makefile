@@ -11,7 +11,7 @@ cu_OBJS = main2.o bmpfuncs.o serialConv.o kernel_cu.o helper_cu.o
 
 
 cuda: $(cu_OBJS) 
-	$(NVCC) ${CUDA_LINK_FLAGS} -o conv_cuda $(cu_OBJS)
+	$(NVCC) ${CUDA_LINK_FLAGS} -o conv $(cu_OBJS)
 
 kernel_cu.o: kernel_cu.cu kernel_cu.h
 	${NVCC} ${CUDA_COMPILE_FLAGS} -c kernel_cu.cu -o $@

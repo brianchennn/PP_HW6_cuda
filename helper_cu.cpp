@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "helper.h"
+#include "helper_cu.h"
 
 // This function reads in a text file and stores it as a char pointer
 char *readSource(char *kernelPath)
 {
-    cl_int status;
+    int status;
     FILE *fp;
     char *source;
     long int size;
